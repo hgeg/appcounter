@@ -13,9 +13,11 @@ urlpatterns = patterns('',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')/,
 
     # Uncomment the next line to enable the admin:
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^add/(?P<uid>.*)/(?P<app>.*)/', 'counter.views.add', name='add'),
-    url(r'^login/', 'counter.views.login', name='login'),
-    url(r'^logout/', 'counter.views.login', name='logout'),
-    url(r'^report/(?P<app>.*)/', 'counter.views.report', name='report'),
+    url(r'^appcounter/admin/', include(admin.site.urls)),
+    url(r'^appcounter/add/(?P<uid>.*)/(?P<app>.*)/', 'counter.views.add', name='add'),
+    url(r'^appcounter/login/', 'counter.views.login', name='login'),
+    url(r'^accounts/login/', 'counter.views.login', name='login'),
+    url(r'^appcounter/logout/', 'counter.views.login', name='logout'),
+    url(r'^appcounter/report/(?P<app>.*)/', 'counter.views.report', name='report'),
+    url(r'^appcounter/', 'counter.views.report', name='report'),
 )

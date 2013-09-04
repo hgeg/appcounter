@@ -7,12 +7,14 @@ ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 
+LOGIN_URL = '/appcounter/login/'
+
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'db/counter.db',#'/home/ubuntu/appcounter/db/counter.db',                      # Or path to database file if using sqlite3.
+        'NAME': '/home/ubuntu/appcounter/db/counter.db',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': '',
         'PASSWORD': '',
@@ -111,8 +113,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    #'/home/ubuntu/appcounter/static/',
-    'static/',
+    '/home/ubuntu/appcounter/static/',
 )
 
 INSTALLED_APPS = (

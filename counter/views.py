@@ -1,10 +1,11 @@
 # Create your views here.
 from django.contrib.auth.decorators import login_required
+from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as authLogin 
 from django.contrib.auth import logout as authLogout
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseRedirect
 from counter.models import *
 from datetime import date,timedelta
 
@@ -34,17 +35,17 @@ def report(request,app):
 
 def login(request):
   if request.method != 'POST':
-    return render_to_response('signin.html')
+    return render_to_response('signin.html',{},context_instance=RequestContext(request))
   else:
     user = authenticate(username=request.POST['username'], password=request.POST['password'])
     if user is not None:
       if user.is_active:
         authLogin(request,user)
-        return report(request,'all')
+        return HttpResponseRedirect('/appcounter/report/all/')
       else:
-        return render_to_response('signin.html',{'message':'User deactivated'})
+        return render_to_response('signin.html',{'message':'User deactivated'},context_instance=RequestContext(request))
     else:
-      return render_to_response('signin.html',{'message':'Incorrect username/password'})
+      return render_to_response('signin.html',{'message':'Incorrect username/password'},context_instance=RequestContext(request))
 
 
 @login_required
