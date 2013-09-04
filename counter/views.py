@@ -19,6 +19,10 @@ def add(request,uid,app):
   today.save()
   return HttpResponse('OK')
 
+def next_day(request):
+  for e in App.objects.all(): e.getDailyReport(date.today())
+  return HttpResponse('OK')
+
 @login_required
 def report(request,app):
   apps = App.objects.all()

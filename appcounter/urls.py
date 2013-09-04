@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^appcounter/admin/', include(admin.site.urls)),
     url(r'^appcounter/add/(?P<uid>.*)/(?P<app>.*)/', 'counter.views.add', name='add'),
+    url(r'^appcounter/next/', 'counter.views.next_day', name='next'),
     url(r'^appcounter/login/', 'counter.views.login', name='login'),
     url(r'^accounts/login/', 'counter.views.login', name='login'),
     url(r'^appcounter/logout/', 'counter.views.login', name='logout'),
