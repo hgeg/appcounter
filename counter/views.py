@@ -24,7 +24,6 @@ def report(request,app):
   apps = App.objects.all()
   data = {}
   for app in apps:
-    report = []
     dt = date.today()-timedelta(days=7)
     report = app.reports.filter(date__gte=dt).order_by('date')
     if report:
