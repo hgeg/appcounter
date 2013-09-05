@@ -33,7 +33,7 @@ def report(request,app):
     if report:
       data[app.name] = report
     else: data[app.name] = None
-  span = Daily.objects.order_by('date') 
+  span = Daily.objects.distinct('date').order_by('date') 
   return render_to_response('report.html',{'data':data,'span':span})
 
 def login(request):
