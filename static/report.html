@@ -56,7 +56,7 @@
               {%for key,value in data.items%}
               {
                   name: '{{key}}',
-                  data: [{%for report in value%}{{report.app_opens}}{%endfor%}]
+                  data: [{%for report in value%}{{report.app_opens}},{%endfor%}]
               }, 
               {%endfor%} 
               ]
@@ -101,7 +101,7 @@
               {%for key,value in data.items%}
               {
                   name: '{{key}}',
-                  data: [{%for report in value%}{{report.client_count}}{%endfor%}]
+                  data: [{%for report in value%}{{report.client_count}},{%endfor%}]
               }, 
               {%endfor%} 
               ]
@@ -155,6 +155,12 @@
     <div class="jumbotron">
       <div class="container">
         <h4>Statistics for last 7 days</h4>
+        <p>
+          {{data}}
+        </p>
+        <p>
+          {{span}}
+        </p>
         <div id="chart_total"></div>
         <br/>
         <div id="chart_unique"></div>
