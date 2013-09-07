@@ -15,8 +15,11 @@ def add(request,uid,app):
   print today
   client = Client.objects.get_or_create(uid=uid,defaults={'metadata':'{"app":"%s"}'%app})[0]
   today.clients.add(client)
-  today.app_opens +=1
+  currentApp.clients.add(client)
+  today.app_opens += 1
+  currentApp.opens += 1
   today.save()
+  currentApp.save()
   return HttpResponse('OK')
 
 def next_day(request):
@@ -24,8 +27,9 @@ def next_day(request):
   return HttpResponse('OK')
 
 @login_required
-def report(request,app):
-  apps = App.objects.all()
+def report(request):
+  profile = request.user.get_profile()
+  apps = profile.apps.all()
   data = {}
   for app in apps:
     dt = date.today()-timedelta(days=7)
@@ -34,7 +38,7 @@ def report(request,app):
       data[app.name] = report
     else: data[app.name] = None
   span = Daily.objects.order_by('date').values('date').distinct()
-  return render_to_response('report.html',{'data':data,'span':span})
+  return render_to_response('report.html',{'data':data,'span':span,'apps':apps})
 
 def login(request):
   if request.method != 'POST':
@@ -44,7 +48,7 @@ def login(request):
     if user is not None:
       if user.is_active:
         authLogin(request,user)
-        return HttpResponseRedirect('/appcounter/report/all/')
+        return HttpResponseRedirect('/appcounter/report/')
       else:
         return render_to_response('signin.html',{'message':'User deactivated'},context_instance=RequestContext(request))
     else:

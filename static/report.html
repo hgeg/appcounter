@@ -146,24 +146,33 @@
               <input type="password" placeholder="Password" class="form-control">
             </div>
             <button type="submit" class="btn btn-success">Sign in</button>
-          </form>
+          </form>a
         </div>
         <!--/.navbar-collapse -->
       </div>
     </div>
     <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-      <div class="container">
-        <h4>Statistics for last 7 days</h4>
-        <!--<p>
-          {{data}}
-        </p>
-        <p>
-          {{span}}
-        </p>-->
+    <div class="container">
+      <div class="container col-8">
+        <br/>
+        <h4>Graphs for last 7 days</h4>
         <div id="chart_total"></div>
         <br/>
         <div id="chart_unique"></div>
+        <br>
+      </div>
+      <div style="background-color:#e8e8e8;">
+        <br/>
+        <h4>App statistics</h4>
+        <div class="row">
+          {%for app in apps%}
+            <div class="col-6 col-sm-6 col-lg-4">
+              <h3> <img src="https://s3.amazonaws.com/appcounter/logos/{{app.name}}.png" width="40" class="img-circle" height="40"> {{app.name}}</h3>
+              <p style="font-size:16px;"><span style="font-weight:bold;">App opens: </span>{{app.opens}}</p>
+              <p style="font-size:16px;"><span style="font-weight:bold;"># of clients: </span>{{app.clients.count}}</p>
+            </div><!--/span-->
+          {%endfor%}
+          </div><!--/row-->
       </div>
     </div>
     <div class="container">

@@ -19,6 +19,6 @@ urlpatterns = patterns('',
     url(r'^appcounter/login/', 'counter.views.login', name='login'),
     url(r'^accounts/login/', 'counter.views.login', name='login'),
     url(r'^appcounter/logout/', 'counter.views.login', name='logout'),
-    url(r'^appcounter/report/(?P<app>.*)/', 'counter.views.report', name='report'),
+    url(r'^appcounter/report/', 'counter.views.report', name='report'),
     url(r'^appcounter/', 'counter.views.report', name='report'),
 )
