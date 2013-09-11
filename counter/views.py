@@ -12,8 +12,8 @@ import json
 
 def open(request,uid,app):
   currentApp = App.objects.get_or_create(name=app)[0]
-  today = currentApp.getDailyReport(date.today())
-  client = Client.objects.get_or_create(uid=uid,defaults={'metadata':'{"app":"%s"}'%app})[0]
+  today = currentApp.reports.get_or_create(date=date.today())[0]
+  client = Client.objects.get_or_create(uid=uid)[0]
   today.clients.add(client)
   currentApp.clients.add(client)
   today.app_opens += 1
@@ -25,10 +25,10 @@ def open(request,uid,app):
 def action(request,uid,app,action):
   #get objects
   currentApp = App.objects.get_or_create(name=app)[0]
-  today = currentApp.reports.get_or_create(date=date)[0]
-  client = Client.objects.get_or_create(uid=uid,defaults={'metadata':'{"app":"%s"}'%app})[0]
-  action = Action.objects.get_or_create(metadata=action,app=app)
-  action.count +=1;
+  today = currentApp.reports.get_or_create(date=date.today())[0]
+  client = Client.objects.get_or_create(uid=uid)[0]
+  action = Action.objects.get_or_create(metadata=action,appname=app)[0]
+  action.counts +=1;
   action.save()
 
   #add client
@@ -38,6 +38,7 @@ def action(request,uid,app,action):
   #add action
   currentApp.actions.add(action)
   today.actions.add(action)
+  client.actions.add(action)
  
   today.save()
   currentApp.save()
@@ -80,6 +81,7 @@ def login(request):
     if user is not None:
       if user.is_active:
         authLogin(request,user)
+        profile = Profile.objects.get_or_create(user=user)
         return HttpResponseRedirect('/appcounter/report/')
       else:
         return render_to_response('signin.html',{'message':'User deactivated'},context_instance=RequestContext(request))

@@ -12,7 +12,7 @@ class App(models.Model):
   opens = models.IntegerField(default=0)
   clients   = models.ManyToManyField('Client')
   reports = models.ManyToManyField('Daily')
-  #actions   = models.ManyToManyField('Action')
+  actions   = models.ManyToManyField('Action')
   
   def getDailyReport(self,span):
     dt = date.today()-timedelta(days=7)
@@ -37,16 +37,17 @@ class Daily(models.Model):
   date      = models.DateField(auto_now_add=True)
   clients   = models.ManyToManyField('Client')
   app_opens = models.IntegerField(default=0)
-  #actions   = models.ManyToManyField('Action')
+  actions   = models.ManyToManyField('Action')
 
   def client_count(self): return self.clients.count()
 
 class Client(models.Model):
   uid = models.CharField(max_length=200,primary_key=True)
+  actions   = models.ManyToManyField('Action')
 
 class Action(models.Model):
   clients  = models.ManyToManyField('Client')
   metadata = models.CharField(max_length=200)
-  count    = models.IntegerField(default=0) 
-  app      = models.CharField(max_length=200)
+  counts    = models.IntegerField(default=0) 
+  appname  = models.CharField(max_length=200)
 
