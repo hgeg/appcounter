@@ -8,16 +8,37 @@ from django.contrib.auth import logout as authLogout
 from django.http import HttpResponse,HttpResponseRedirect
 from counter.models import *
 from datetime import date,timedelta
+import json
 
-def add(request,uid,app):
+def open(request,uid,app):
   currentApp = App.objects.get_or_create(name=app)[0]
   today = currentApp.getDailyReport(date.today())
-  print today
   client = Client.objects.get_or_create(uid=uid,defaults={'metadata':'{"app":"%s"}'%app})[0]
   today.clients.add(client)
   currentApp.clients.add(client)
   today.app_opens += 1
   currentApp.opens += 1
+  today.save()
+  currentApp.save()
+  return HttpResponse('OK')
+
+def action(request,uid,app,action):
+  #get objects
+  currentApp = App.objects.get_or_create(name=app)[0]
+  today = currentApp.getDailyReport(date.today())
+  client = Client.objects.get_or_create(uid=uid,defaults={'metadata':'{"app":"%s"}'%app})[0]
+  action = Action.objects.get_or_create(metadata=action,app=app)
+  action.count +=1;
+  action.save()
+
+  #add client
+  today.clients.add(client)
+  currentApp.clients.add(client)
+
+  #add action
+  currentApp.actions.add(action)
+  today.actions.add(action)
+ 
   today.save()
   currentApp.save()
   return HttpResponse('OK')
@@ -28,6 +49,7 @@ def next_day(request):
 
 @login_required
 def report(request):
+  span = Daily.objects.order_by('date').values('date').distinct()
   profile = request.user.get_profile()
   apps = profile.apps.all()
   data = {}
@@ -35,9 +57,15 @@ def report(request):
     dt = date.today()-timedelta(days=7)
     report = app.reports.filter(date__gte=dt).order_by('date')
     if report:
-      data[app.name] = report
-    else: data[app.name] = None
-  span = Daily.objects.order_by('date').values('date').distinct()
+      indexed = []
+      print ""
+      print span
+      print ""
+      for d in span:
+        t = report.filter(date=d['date'])[0]
+        if t: indexed.append(t.app_opens)
+        else: indexed.append(0)
+        data[app.name] = indexed
   return render_to_response('report.html',{'data':data,'span':span,'apps':apps})
 
 def login(request):

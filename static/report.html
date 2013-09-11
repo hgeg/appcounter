@@ -56,7 +56,7 @@
               {%for key,value in data.items%}
               {
                   name: '{{key}}',
-                  data: [{%for report in value%}{{report.app_opens}},{%endfor%}]
+                  data: [{%for report in value%}{{report}},{%endfor%}]
               }, 
               {%endfor%} 
               ]

@@ -11,6 +11,7 @@ class App(models.Model):
   opens = models.IntegerField(default=0)
   clients   = models.ManyToManyField('Client')
   reports = models.ManyToManyField('Daily')
+  #actions   = models.ManyToManyField('Action')
 
   def getDailyReport(self,date):
     return self.reports.get_or_create(date=date)[0]
@@ -19,10 +20,16 @@ class Daily(models.Model):
   date      = models.DateField(auto_now_add=True)
   clients   = models.ManyToManyField('Client')
   app_opens = models.IntegerField(default=0)
+  #actions   = models.ManyToManyField('Action')
 
   def client_count(self): return self.clients.count()
 
 class Client(models.Model):
   uid = models.CharField(max_length=200,primary_key=True)
-  metadata = models.CharField(max_length=200,default="")
+
+class Action(models.Model):
+  clients  = models.ManyToManyField('Client')
+  metadata = models.CharField(max_length=200)
+  count    = models.IntegerField(default=0) 
+  app      = models.CharField(max_length=200)
 
