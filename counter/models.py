@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date,timedelta
 # Create your models here.
 
 class Profile(models.Model):
@@ -12,9 +13,25 @@ class App(models.Model):
   clients   = models.ManyToManyField('Client')
   reports = models.ManyToManyField('Daily')
   #actions   = models.ManyToManyField('Action')
-
-  def getDailyReport(self,date):
-    return self.reports.get_or_create(date=date)[0]
+  
+  def getDailyReport(self,span):
+    dt = date.today()-timedelta(days=7)
+    report = self.reports.filter(date__gte=dt).order_by('date')
+    indexed = []
+    cliexed = []
+    actixed = []
+    if report:
+      for d in span:
+        t = report.filter(date=d['date'])
+        if t: 
+          indexed.append(t[0].app_opens)
+          cliexed.append(t[0].clients.count())
+          actixed.append(t[0].actions.all())
+        else: 
+          indexed.append(0)
+          cliexed.append(9)
+          actixed.append([])
+    return [indexed, cliexed, actixed]
 
 class Daily(models.Model):
   date      = models.DateField(auto_now_add=True)

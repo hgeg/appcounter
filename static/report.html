@@ -53,7 +53,7 @@
                   borderWidth: 0
               },
               series: [
-              {%for key,value in data.items%}
+              {%for key,value in opens.items%}
               {
                   name: '{{key}}',
                   data: [{%for report in value%}{{report}},{%endfor%}]
@@ -98,10 +98,10 @@
                   borderWidth: 0
               },
               series: [
-              {%for key,value in data.items%}
+              {%for key,value in clients.items%}
               {
                   name: '{{key}}',
-                  data: [{%for report in value%}{{report.client_count}},{%endfor%}]
+                  data: [{%for report in value%}{{report}},{%endfor%}]
               }, 
               {%endfor%} 
               ]
@@ -170,6 +170,7 @@
               <h3> <img src="https://s3.amazonaws.com/appcounter/logos/{{app.name}}.png" width="40" class="img-circle" height="40"> {{app.name}}</h3>
               <p style="font-size:16px;"><span style="font-weight:bold;">App opens: </span>{{app.opens}}</p>
               <p style="font-size:16px;"><span style="font-weight:bold;"># of clients: </span>{{app.clients.count}}</p>
+              <a class="btn btn-primary" href="/appcounter/app/{{app.name}}/">View Details</a>
             </div><!--/span-->
           {%endfor%}
           </div><!--/row-->

@@ -25,7 +25,7 @@ def open(request,uid,app):
 def action(request,uid,app,action):
   #get objects
   currentApp = App.objects.get_or_create(name=app)[0]
-  today = currentApp.getDailyReport(date.today())
+  today = currentApp.reports.get_or_create(date=date)[0]
   client = Client.objects.get_or_create(uid=uid,defaults={'metadata':'{"app":"%s"}'%app})[0]
   action = Action.objects.get_or_create(metadata=action,app=app)
   action.count +=1;
@@ -44,7 +44,7 @@ def action(request,uid,app,action):
   return HttpResponse('OK')
 
 def next_day(request):
-  for e in App.objects.all(): e.getDailyReport(date.today())
+  for e in App.objects.all(): e.reports.get_or_create(date=date.today())
   return HttpResponse('OK')
 
 @login_required
@@ -52,22 +52,26 @@ def report(request):
   span = Daily.objects.order_by('date').values('date').distinct()
   profile = request.user.get_profile()
   apps = profile.apps.all()
-  data = {}
+  opens = {}
+  clients = {}
   for app in apps:
-    dt = date.today()-timedelta(days=7)
-    report = app.reports.filter(date__gte=dt).order_by('date')
-    if report:
-      indexed = []
-      print ""
-      print span
-      print ""
-      for d in span:
-        t = report.filter(date=d['date'])[0]
-        if t: indexed.append(t.app_opens)
-        else: indexed.append(0)
-        data[app.name] = indexed
-  return render_to_response('report.html',{'data':data,'span':span,'apps':apps})
+      #actions are unused at this point
+      opens[app.name],clients[app.name], x = app.getDailyReport(span)
+  return render_to_response('report.html',{'opens':opens,'clients':clients,'span':span,'apps':apps})
 
+@login_required
+def detail(request,app):
+  span = Daily.objects.order_by('date').values('date').distinct()
+  profile = request.user.get_profile()
+  currentApp = profile.apps.filter(name=app)
+  if not currentApp:
+    return render_to_response('error.html',{'msg':'You don\'t have the permissions to see this app.'})
+  currentApp = currentApp[0]
+  data = app.getDailyReport(span)
+  return render_to_response('detail.html',{'opens':data[0],'clients':data[1],'actions':data[2],'span':span,'app':currentApp})
+   
+
+  
 def login(request):
   if request.method != 'POST':
     return render_to_response('signin.html',{},context_instance=RequestContext(request))
