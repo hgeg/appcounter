@@ -68,10 +68,8 @@ def detail(request,app):
   if not currentApp:
     return render_to_response('error.html',{'msg':'You don\'t have the permissions to see this app.'})
   currentApp = currentApp[0]
-  data = app.getDailyReport(span)
+  data = currentApp.getDailyReport(span)
   return render_to_response('detail.html',{'opens':data[0],'clients':data[1],'actions':data[2],'span':span,'app':currentApp})
-   
-
   
 def login(request):
   if request.method != 'POST':
