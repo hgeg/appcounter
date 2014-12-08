@@ -16,7 +16,7 @@ AUTH_PROFILE_MODULE = 'counter.Profile'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '/home/ubuntu/appcounter/db/counter.db',                      # Or path to database file if using sqlite3.
+        'NAME': './db/counter.db',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': '',
         'PASSWORD': '',
@@ -69,7 +69,7 @@ STATIC_ROOT = 'static/'#'/home/ubuntu/appcounter/static/'
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
-STATIC_URL = 'memeler/appcounter/static/'
+STATIC_URL = 'appcounter/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -117,6 +117,7 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     '/home/ubuntu/appcounter/static/',
+    './static/',
 )
 
 INSTALLED_APPS = (
