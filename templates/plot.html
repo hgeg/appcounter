@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+  <title>appcounter</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="/counter/static/style.css" type="text/css" media="all" />
+  <link rel="stylesheet" href="/counter/static/epoch.min.css" type="text/css" media="all" />
+  <script src="/counter/static/zepto.min.js" charset="utf-8"></script>
+  <script src="/counter/static/d3.min.js" charset="utf-8"></script>
+  <script src="/counter/static/epoch.min.js" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript" charset="utf-8">
+    colors = d3.scale.category10();
+    {% for app in apps %}
+      $(function(){
+        $.post('/counter/dashboard/{{app}}/',{},function(res) {
+          data = res['data'];
+          actions = res['actions']
+            for(i=0;i<actions.length;i++) {
+              $('#{{app}}Legend').append('<span class="legend-item" style="background-color:'+colors(i)+';">&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="legend-text">'+actions[i]+'</span>')
+            }  
+          $('#{{app}}').epoch({
+            type: 'bar',
+            data: data,
+          });
+        });
+      });
+    {% endfor %}
+ 
+  </script>
+</head>
+<body class="epoch-theme-default">
+  <header>
+    <h2>Apps</h2>
+  </header>
+    {% for app in apps %}
+      <h4><img src="/counter/static/icons/{{app}}.png" class="icon" alt="app_icon"/>{{app}}:</h4>
+      <div id="{{app}}" class="plot epoch"></div>
+      <div id="{{app}}Legend" class="legend"></div>
+    {% endfor %}
+  <footer>
+    
+  </footer>
+</body>
+</html>

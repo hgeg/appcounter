@@ -1,0 +1,34 @@
+body {
+  font-family: Verdana;
+}
+
+.plot {
+  width: 50%;
+  height: 200px;
+}
+
+.legend {
+  margin-left: 20px;
+  font-size: 12px;
+}
+
+.legend-item {
+  margin: 5px;
+  margin-right: 0px;
+  height: 1em;
+  width: 1em;
+}
+
+.legend-text {
+  margin: 5px;
+  margin-left: 0px;
+  margin-right: 10px;
+}
+
+.icon {
+  height: 29px;
+  width: 29px;
+  vertical-align: middle;
+  margin-left: 5px;
+  margin-right: 5px;
+}
